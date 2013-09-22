@@ -31,9 +31,8 @@ require_once($CFG->dirroot . '/local/goodbye/check_account_form.php');
 
 $PAGE->set_context(get_system_context());
 $PAGE->set_url('/local/goodbye/index.php');
-$PAGE->set_title(format_string(get_string('deleteaccount','local_goodbye')));
-$PAGE->set_heading(format_string(get_string('userpass','local_goodbye')));
-
+$PAGE->set_title(format_string(get_string('deleteaccount', 'local_goodbye')));
+$PAGE->set_heading(format_string(get_string('userpass', 'local_goodbye')));
 
 $enabled = get_config('local_goodbye', 'enabled');
 
@@ -42,37 +41,33 @@ if ($enabled) {
 
     global $USER;
 
-    $message = '';
     $error = '';
 
     if ($local_user = $checkaccount->get_data()) {
         if ($local_user->username != '' && $local_user->password != '') {
             if ($user = $DB->get_record('user', array('username'=>$local_user->username))) {
-                //User Exists, Check pass
+                // User Exists, Check pass.
                 if ($user = authenticate_user_login($local_user->username, $local_user->password) ) {
                     if ($user->auth != 'email') {
-                        $error = get_string('noself','local_goodbye');
-                    } elseif ($user->id = $USER->id ) {
+                        $error = get_string('noself', 'local_goodbye');
+                    } else if ($user->id = $USER->id ) {
                         delete_user($user);
                         redirect(new moodle_url('/'));
                     }
                 } else {
-                    $error = get_string('loginerror','local_goodbye');
+                    $error = get_string('loginerror', 'local_goodbye');
                 }
             } else {
-                $error = get_string('loginerror','local_goodbye');
+                $error = get_string('loginerror', 'local_goodbye');
             }
         }
     }
 
-    echo $OUTPUT->header(get_string('deleteaccount','local_goodbye'));
-
-    echo $message;
-    echo $error;
-
+    echo $OUTPUT->header(get_string('deleteaccount', 'local_goodbye'));
     $checkaccount->display();
+    echo $error;
 } else {
-    echo $OUTPUT->header(get_string('disabled','local_goodbye'));
+    echo $OUTPUT->header(get_string('disabled', 'local_goodbye'));
 }
 
 echo $OUTPUT->footer();

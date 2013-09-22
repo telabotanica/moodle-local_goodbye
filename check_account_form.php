@@ -1,5 +1,4 @@
 <?php
-
 // This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -32,22 +31,28 @@ require_once($CFG->libdir . '/formslib.php');
 
 class check_account_form extends moodleform {
 
-  // Define the form
-  function definition() {
-    global $USER, $CFG, $COURSE;
+    public function definition() {
+        global $USER, $CFG, $COURSE;
 
-    $mform = $this->_form;
-    $userid = $USER->id;
-    $strrequired = get_string('required');
+        $mform = $this->_form;
+        $userid = $USER->id;
+        $strrequired = get_string('required');
 
-    $mform->addElement('text', 'username', 'username');
-    $mform->setType('username', PARAM_TEXT);
+        $farewell = get_config('local_goodbye', 'farewell');
+        if (empty($farewell)) {
+            $farewell = get_string('defaultfarewell', 'local_goodbye');
+        }
+        $mform->addElement('static', 'farewell', '', get_config('local_goodbye', 'farewell'));
 
-    $mform->addElement('password', 'password', 'password');
-    $mform->setType('password', PARAM_TEXT);
+        $mform->addElement('text', 'username', 'username');
+        $mform->setType('username', PARAM_TEXT);
+        $mform->addRule('username', $strrequired, 'required', null, 'client');
 
-    $mform->addElement('submit', 'submit', get_string('submit'));
+        $mform->addElement('password', 'password', 'password');
+        $mform->setType('password', PARAM_TEXT);
+        $mform->addRule('password', $strrequired, 'required', null, 'client');
 
+        $mform->addElement('submit', 'submit', get_string('submit'));
 
-  }
+    }
 }

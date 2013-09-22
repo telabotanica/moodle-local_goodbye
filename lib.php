@@ -29,13 +29,15 @@
 function local_goodbye_extends_navigation(global_navigation $navigation) {
     global $USER;
 
-    //if ($USER->auth != 'email') {
-   //     return '';
-   // }
-
+    if (!isloggedin() || isguestuser()) {
+        return '';
+    }
     $enabled = get_config('local_goodbye', 'enabled');
 
-    if (isloggedin() && $enabled) {
+    if ($enabled ) {
+        if ($USER->auth != 'email') {
+            return '';
+        }
         $container2 = $navigation->add(get_string('myaccount', 'local_goodbye'));
         $userview2 = $container2->add(get_string('manageaccount', 'local_goodbye'), new moodle_url('/local/goodbye/index.php'));
     }

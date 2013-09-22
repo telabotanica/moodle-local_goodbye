@@ -42,5 +42,11 @@ if ($hassiteconfig) {
     $description = get_string('enabled_desc', 'local_goodbye');
     $setting = new admin_setting_configcheckbox($name, $title, $description, 0);
     $settings->add($setting);
+
+    $name = 'local_goodbye/farewell';
+    $title = get_string('farewell', 'local_goodbye');
+    $description = get_string('farewell_desc', 'local_goodbye');
+    $setting = new admin_setting_confightmleditor($name, $title, $description, get_string('defaultfarewell', 'local_goodbye'));
+    $settings->add($setting);
 }
 

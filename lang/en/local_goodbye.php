@@ -36,3 +36,6 @@ $string['deleteaccount'] = 'Delete your account';
 $string['userpass'] = 'Enter your username and password';
 $string['noself'] = 'We are sorry, only self registration accounts are allowed to delete their account';
 $string['disabled'] = 'Account removal disabled';
+$string['farewell'] = 'Goodby text';
+$string['farewell_desc'] = 'Text shown on delete account form';
+$string['defaultfarewell'] = 'To delete your account please enter your username and password. <br>Thank you for using Moodle!';
