@@ -39,3 +39,4 @@ $string['disabled'] = 'Account removal disabled';
 $string['farewell'] = 'Goodby text';
 $string['farewell_desc'] = 'Text shown on delete account form';
 $string['defaultfarewell'] = 'To delete your account please enter your username and password. <br>Thank you for using Moodle!';
+$string['useraccountdeleted'] = 'Your account has been deleted from this site.';
