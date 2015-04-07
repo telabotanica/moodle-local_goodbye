@@ -29,16 +29,16 @@
 function local_goodbye_extends_navigation(global_navigation $navigation) {
     global $USER;
 
-    if (!isloggedin() || isguestuser()) {
+    if (!isloggedin() || isguestuser() && !is_siteadmin()) {
         return '';
     }
     $enabled = get_config('local_goodbye', 'enabled');
 
-    if ($enabled ) {
-        if ($USER->auth != 'email') {
-            return '';
+    if ($enabled && ($USER->auth == 'email' || $USER->auth == 'manual')) {
+
+        $container2 = $navigation->get('myprofile');
+        if (!empty($container2)) {
+            $container2->add(get_string('manageaccount', 'local_goodbye'), new moodle_url('/local/goodbye/index.php'));
         }
-        $container2 = $navigation->add(get_string('myaccount', 'local_goodbye'));
-        $userview2 = $container2->add(get_string('manageaccount', 'local_goodbye'), new moodle_url('/local/goodbye/index.php'));
     }
 }

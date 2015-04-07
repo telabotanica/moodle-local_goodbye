@@ -29,14 +29,15 @@ require_once(dirname(dirname(dirname(__FILE__))).'/config.php');
 require_once(dirname(__FILE__).'/lib.php');
 require_once($CFG->dirroot . '/local/goodbye/check_account_form.php');
 
-$PAGE->set_context(get_system_context());
+$PAGE->set_context(context_system::instance());
 $PAGE->set_url('/local/goodbye/index.php');
 $PAGE->set_title(format_string(get_string('deleteaccount', 'local_goodbye')));
 $PAGE->set_heading(format_string(get_string('userpass', 'local_goodbye')));
-
 $enabled = get_config('local_goodbye', 'enabled');
 
-if ($enabled) {
+require_login();
+
+if ($enabled && !is_siteadmin() && !isguestuser()) {
     $checkaccount = new check_account_form();
 
     global $USER;
@@ -48,11 +49,23 @@ if ($enabled) {
             if ($user = $DB->get_record('user', array('username'=>$local_user->username))) {
                 // User Exists, Check pass.
                 if ($user = authenticate_user_login($local_user->username, $local_user->password) ) {
-                    if ($user->auth != 'email') {
-                        $error = get_string('noself', 'local_goodbye');
-                    } else if ($user->id = $USER->id ) {
+                    complete_user_login($user);
+                    if ($user->id == $USER->id && ($USER->auth == 'email' || $USER->auth == 'manual')) {
                         delete_user($user);
-                        redirect(new moodle_url('/'));
+
+                        $authsequence = get_enabled_auth_plugins(); // auths, in sequence
+                        foreach($authsequence as $authname) {
+                            $authplugin = get_auth_plugin($authname);
+                            $authplugin->logoutpage_hook();
+                        }
+
+                        require_logout();
+                        echo $OUTPUT->header(get_string('deleteaccount', 'local_goodbye'));
+                        echo $OUTPUT->notification(get_string('useraccountdeleted', 'local_goodbye'), 'notifysuccess');
+                        echo $OUTPUT->footer();
+                        exit;
+                    } else {
+                        $error = get_string('noself', 'local_goodbye');
                     }
                 } else {
                     $error = get_string('loginerror', 'local_goodbye');
