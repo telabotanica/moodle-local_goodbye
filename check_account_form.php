@@ -44,11 +44,11 @@ class check_account_form extends moodleform {
         }
         $mform->addElement('static', 'farewell', '', get_config('local_goodbye', 'farewell'));
 
-        $mform->addElement('text', 'username', 'username');
+        $mform->addElement('text', 'username', get_string('username'));
         $mform->setType('username', PARAM_TEXT);
         $mform->addRule('username', $strrequired, 'required', null, 'client');
 
-        $mform->addElement('password', 'password', 'password');
+        $mform->addElement('password', 'password', get_string('password'));
         $mform->setType('password', PARAM_TEXT);
         $mform->addRule('password', $strrequired, 'required', null, 'client');
 
